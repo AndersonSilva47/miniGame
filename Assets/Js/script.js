@@ -35,6 +35,14 @@ document.addEventListener('keypress', () => {
     }
 });
 
+document.addEventListener('click', () => {
+    if (flag === 0) {
+        jump();
+    } else {
+        return;
+    }
+});
+
 const loop = setInterval(() => {
     const arbusto = document.querySelector('.arbusto');
     const arbustoPosition = arbusto.offsetLeft;
