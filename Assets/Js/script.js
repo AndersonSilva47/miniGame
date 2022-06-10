@@ -27,7 +27,7 @@ const pontos = setInterval(() => {
 }, 100);
  
 
-document.addEventListener('keypress', () => {
+document.addEventListener('keydown', () => {
     if (flag === 0) {
         jump();
     } else {
