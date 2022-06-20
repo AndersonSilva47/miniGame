@@ -6,11 +6,20 @@ function Game() {
     let mode = 'stop';
 
 
+    document.addEventListener('keypress', (e) => {
+        if (flag === 0) {
+            this.jump();
+        } else {
+            return;
+        }
+    });
+
     document.addEventListener('click', (e) => {
         el = e.target;
 
         if (el.classList.contains('buttonPaused')) {
             this.play();
+
         }
 
         if (el.classList.contains('reset')) {
@@ -21,14 +30,6 @@ function Game() {
 
         }
     })
-
-    document.addEventListener('keydown', (e) => {
-        if (flag === 0) {
-            this.jump();
-        } else {
-            return;
-        }
-    });
 
 
     this.play = () => {
