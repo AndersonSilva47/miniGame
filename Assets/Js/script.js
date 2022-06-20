@@ -17,6 +17,12 @@ function Game() {
     document.addEventListener('click', (e) => {
         el = e.target;
 
+        if (flag === 0) {
+            this.jump();
+        } else {
+            return;
+        }
+
         if (el.classList.contains('buttonPaused')) {
             this.play();
 
