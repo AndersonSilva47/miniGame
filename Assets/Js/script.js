@@ -1,80 +1,192 @@
+function Game() {
+    const pontuacao = document.querySelector('.points');
+    flag = 0;
+    point = 0;
+    highScore = 0;
+    let mode = 'stop';
 
-let flag = 0;
-let point = 0;
 
-const jump = () => {
-    const dog = document.querySelector('.dog');
+    document.addEventListener('click', (e) => {
+        el = e.target;
 
-    flag = 1;
-    dog.classList.add('dogjump');
+        if (el.classList.contains('buttonPaused')) {
+            this.play();
+        }
 
-    setTimeout(() => {
-        dog.classList.remove('dogjump');
-        flag = 0;
-    }, 700);
+        if (el.classList.contains('reset')) {
+            this.paused();
+        }
+
+        if (el.classList.contains('gameOver')) {
+
+        }
+    })
+
+    document.addEventListener('keydown', (e) => {
+        if (flag === 0) {
+            this.jump();
+        } else {
+            return;
+        }
+    });
+
+
+    this.play = () => {
+
+        const buttonPaused = document.querySelector('.buttonPaused');
+        const arbusto = document.querySelector('.arbusto');
+        const nuvem = document.querySelector('.clouds');
+
+        mode = 'isRun';
+
+        this.reloadHs();
+        if (buttonPaused) {
+            buttonPaused.remove();
+
+
+            arbusto.style.animation = 'arbustoMove 2s infinite linear';
+            nuvem.style.animation = 'nuvens 22s infinite linear';
+            pointsComputed();
+
+        } else {
+
+        }
+    }
+
+
+    this.paused = () => {
+
+        if (mode !== 'gameover') {
+            mode = 'stop';
+            pointsComputed();
+
+            const arbusto = document.querySelector('.arbusto');
+            const nuvem = document.querySelector('.clouds');
+
+
+            arbusto.style.animation = 'inherit';
+            nuvem.style.animation = 'inherit';
+
+
+            this.window('buttonPaused', 'PLAY');
+        }
+    }
+
+    this.window = (className, text) => {
+        const container = document.querySelector('.container');
+
+        const div = document.createElement('div');
+        div.innerHTML = text;
+        div.classList.add(className);
+
+        container.appendChild(div);
+    }
+
+    this.jump = () => {
+        const dog = document.querySelector('.dog');
+
+        if (mode === 'isRun') {
+            flag = 1;
+            dog.classList.add('dogjump');
+
+            setTimeout(() => {
+                dog.classList.remove('dogjump');
+                flag = 0;
+            }, 700);
+        }
+    }
+
+    pointsComputed = () => {
+        if (mode === 'isRun') {
+            this.pontos = setInterval(() => {
+                const pontuacao = document.querySelector('.points');
+
+                point++
+                pontuacao.innerHTML = point;
+
+                highscore = point;
+            }, 100);
+        } else {
+            clearInterval(this.pontos);
+            point = 0;
+        }
+    }
+
+    this.loop =
+        setInterval(() => {
+
+            const arbusto = document.querySelector('.arbusto');
+            const arbustoPosition = arbusto.offsetLeft;
+
+            const dog = document.querySelector('.dog');
+            const dogPosition = +window.getComputedStyle(dog).bottom.replace('px', '');
+
+            if (arbustoPosition <= 130 && arbustoPosition >= -20 && dogPosition < 50) {
+
+                //Definindo posição do arbusto;
+                arbusto.style.animation = 'none';
+                arbusto.style.left = `${arbustoPosition}px`;
+
+                //definindo posição do ambiente;
+
+                this.salvarPontos(point)
+
+
+
+                //definindo posição do dog;
+                dog.src = './Assets/Img/god.png';
+                dog.style.bottom = `${dogPosition}px`;
+                dog.style.animation = 'none';
+
+                clearInterval(this.loop);
+
+                mode = 'gameover';
+                pointsComputed();
+
+                this.window('gameOver', 'JOGAR NOVAMENTE');
+
+            }
+
+        }, 10);
+
+
+    this.reset = () => {
+        const dog = document.querySelector('.dog');
+        const arbusto = document.querySelector('.arbusto');
+        const buttonGameOver = document.querySelector('.gameOver');
+
+
+        document.onsubmit;
+        this.paused();
+    }
+
+    this.salvarPontos = (pontos) => {
+
+        const hs = document.querySelector('.highpoints');
+        const highscored = pontos;
+
+        if (highscored > hs.innerHTML) {
+            const highJson = JSON.stringify(highscored);
+            localStorage.setItem('games', highJson);
+
+            hs.innerHTML = highscored;
+            this.reloadHs();
+        } else {
+            return;
+        }
+
+
+
+    }
+
+    this.reloadHs = () => {
+        const highJson = localStorage.getItem('games');
+
+        const hs = document.querySelector('.highpoints');
+        hs.innerHTML = highJson;
+    }
+
 
 }
 
-let highscore = 0;
-
-const pontos = setInterval(() => {
-    const pontuacao = document.querySelector('.points');
-
-    point++
-    pontuacao.innerHTML = point;
-
-    highscore = point;
-}, 100);
- 
-
-document.addEventListener('keydown', () => {
-    if (flag === 0) {
-        jump();
-    } else {
-        return;
-    }
-});
-
-document.addEventListener('click', () => {
-    if (flag === 0) {
-        jump();
-    } else {
-        return;
-    }
-});
-
-const loop = setInterval(() => {
-    const arbusto = document.querySelector('.arbusto');
-    const arbustoPosition = arbusto.offsetLeft;
-
-    const ambiente1 = document.querySelector('.back');
-    const ambiente2 = document.querySelector('.back2');
-    const ambienteMov1 = ambiente1.offsetLeft;
-    const ambienteMov2 = ambiente2.offsetLeft;
-
-    const dog = document.querySelector('.dog');
-    const dogPosition = +window.getComputedStyle(dog).bottom.replace('px', '');
-
-    if (arbustoPosition <= 130 && arbustoPosition >= -20 && dogPosition < 50) {
-
-        //Definindo posição do arbusto;
-        arbusto.style.animation = 'none';
-        arbusto.style.left = `${arbustoPosition}px`;
-
-        //definindo posição do ambiente;
-        ambiente1.style.animation = 'none';
-        ambiente2.style.animation = 'none';
-        ambiente1.style.left = `${ambienteMov1}px`;
-        ambiente2.style.left = `${ambienteMov2}px`;
-
-        //definindo posição do dog;
-        dog.src = './Assets/Img/god.png';
-        dog.style.bottom = `${dogPosition}px`;
-        dog.style.animation = 'none';
-
-        clearInterval(loop);
-        clearInterval(pontos);
-    }
-
-}, 10);
-
+const gamer = new Game();
